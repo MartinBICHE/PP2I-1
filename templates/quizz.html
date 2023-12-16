@@ -9,7 +9,7 @@
     {% if current_question %} 
         <div>
             <p>{{ current_question[0] }}</p>
-            <form method='post' action="{{ url_for('quizz') }}">
+            <form method='post' action="/quizz/?question_index={{ question_index }}">
                 <table border='1'>
                     {% for reponse in current_question[1] %}
                         <tr>
@@ -18,8 +18,9 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <input type='hidden' name='question_index' value='{{question_index}}'>
-                <input type='submit' value='Valider'>
+                {% if not user_response is defined %}
+                    <input type='submit' value='Valider'>
+                {% endif %}
             </form>
             {% if user_response is defined %}
                 <p>Votre réponse : {{ user_response }}</p>
