@@ -21,7 +21,18 @@
                 <input type='hidden' name='question_index' value='{{question_index}}'>
                 <input type='submit' value='Valider'>
             </form>
+            {% if user_response is defined %}
+                <p>Votre réponse : {{ user_response }}</p>
+                {% if is_correct %}
+                    <p style='color: green;'>Correct !</p>
+                {% else %}
+                    <p style='color: red;'>Incorrect. La bonne réponse était : {{ current_question[2] }}</p>
+                {% endif %}
+                <a href="{{ url_for('quizz', question_index=question_index + 1) }}">Question suivante</a>   
+            {% endif %}
         </div>
+    {% else %}
+        <p>Fin du quizz.</p>
     {% endif %}
 </body>
 </html>

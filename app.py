@@ -1,17 +1,23 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
+
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+
 
 @app.route('/')
 def index():
     return 'Index'
 
+
 @app.route('/register/')
 def register():
     return 'Register'
 
+
 @app.route('/login/')
 def login():
     return 'Login'
+
 
 @app.route('/quizz/', methods=['GET','POST'])
 def quizz():
@@ -22,15 +28,22 @@ def quizz():
         ["Question 4", ["Réponse 4.1", "Réponse 4.2", "Réponse 4.3", "Réponse 4.4"], "Réponse 4.4"],
     ]
     question_index = int(request.form.get('question_index',0))
+    current_question = questions[question_index] if question_index < len(questions) else None
     if request.method == 'POST':
             user_response = request.form.get('reponse')
-            correct_answer = questions[question_index][2]
+            correct_answer = current_question[2]
             is_correct = user_response == correct_answer
-            print(f'Question {question_index+1}, Réponse de l\'utilisateur : {user_response}, Est-ce correct ? {is_correct}')
-            question_index += 1
-    current_question = questions[question_index] if question_index < len(questions) else None
-    return render_template('quizz.html',current_question=current_question, question_index=question_index)
+            session['user_response'] = user_response 
+            session['is_correct'] = is_correct
+    return render_template('quizz.html',current_question=current_question, question_index=question_index,
+                           user_response=session.pop('user_response', None), is_correct=session.pop('is_correct',None))
+
 
 @app.route('/resultats/')
 def resultats():
     return 'Resultats'
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    
