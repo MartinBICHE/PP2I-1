@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang='fr'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Quizz</title>
+</head>
+<body>
+    <h1>Quizz</h1>   
+    {% for question, reponses in questions %} 
+        <div>
+            <p>{{ question }}</p>
+            <form>
+                <table border='1'>
+                    {% for reponse in reponses %}
+                        <tr>
+                            <td><input type='radio' name='{{ question }}' value='{{ reponse }}'></td>
+                            <td>{{reponse}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+    {% endfor %}
+</body>
+</html>
