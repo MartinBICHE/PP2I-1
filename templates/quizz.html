@@ -6,20 +6,22 @@
 </head>
 <body>
     <h1>Quizz</h1>   
-    {% for question, reponses in questions %} 
+    {% if current_question %} 
         <div>
-            <p>{{ question }}</p>
-            <form>
+            <p>{{ current_question[0] }}</p>
+            <form method='post' action="{{ url_for('quizz') }}">
                 <table border='1'>
-                    {% for reponse in reponses %}
+                    {% for reponse in current_question[1] %}
                         <tr>
-                            <td><input type='radio' name='{{ question }}' value='{{ reponse }}'></td>
+                            <td><input type='radio' name='reponse' value='{{ reponse }}'></td>
                             <td>{{reponse}}</td>
                         </tr>
                     {% endfor %}
                 </table>
+                <input type='hidden' name='question_index' value='{{question_index}}'>
+                <input type='submit' value='Valider'>
             </form>
         </div>
-    {% endfor %}
+    {% endif %}
 </body>
 </html>
