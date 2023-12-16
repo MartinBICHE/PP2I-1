@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8"/>
-    <title>Login</title>
+    <title>Register</title>
     <style>
         .error {
             color: red;
@@ -10,13 +10,13 @@
     </style>
 </head>
 <body>
-    <h1>Login</h1>
+    <h1>Register</h1>
 
-    {% if badCredentials %}
-        <span class="error">Mauvais pseudo et/ou mot de passe !</span>
+    {% if usernameExists %}
+        <span class="error">Pseudo déjà utilisé !</span>
     {% endif %}
 
-    <form action="/login/" method="POST">
+    <form action="/register/" method="POST">
         <table>
             <tr>
                 <td>Pseudo : </td>
@@ -28,7 +28,7 @@
             </tr>
         </table>
 
-        <input type="submit" value="Login"/>
+        <input type="submit" value="Register"/>
     </form>
 </body>
 </html>
