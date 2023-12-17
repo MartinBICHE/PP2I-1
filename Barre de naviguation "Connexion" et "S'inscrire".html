@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Barre de naviguation </title>
+        <meta charset="utf-8">
+        <style>
+            body {
+                align-items: center;
+            }
+            * {
+                margin:0;
+            }
+            .conteneur {
+                position: relative;
+            }
+
+            .image1 {
+                display: block; 
+                position : relative;
+                z-index:2;
+                width: 200px;
+            }
+            .couleur {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 74px; 
+                background-color: rgb(80, 79, 79); 
+                z-index:1;
+            }
+            .ligne {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background-color: black;
+                z-index:1;
+            }
+            .image2 {
+                position:absolute;
+                z-index:2;
+                width: 80px;
+                top:-2px;
+                right:1px;
+            }
+            /*.bouton1 {
+                display:inline-block;
+                position: absolute;
+                top:15px;
+                right:20px;
+                padding: 10px 20px;
+                font-size: 16px;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                border: 2px solid #ffffff;
+                border-radius: 5px;
+                color: #ffffff;
+                background-color: rgb(80, 79, 79);
+                transition: background-color 0.3s, color 0.3s;
+                z-index:2;
+            }
+            .bouton2 {
+                display:inline-block;
+                position: absolute;
+                top:15px;
+                right:160px;
+                padding: 10px 20px;
+                font-size: 16px;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                border: 2px solid #ffffff;
+                border-radius: 5px;
+                color: #ffffff;
+                background-color: rgb(80, 79, 79);
+                transition: background-color 0.3s, color 0.3s;
+                z-index:2;
+            }*/
+        </style>
+    </head>
+    <body>
+        <div class="conteneur">
+            <div class="couleur"></div>
+            <a href="/" class="image1">
+                <img src="Logo.png" class="image1">
+            </a>
+            <div class="ligne"></div>
+            <a href="" class="image2">
+                <img src="Profil.png" class="image2">
+            </a>
+        </div>
+        <!-- <button class="bouton1"> Connexion </button>
+        <button class="bouton2"> S'inscrire </button> -->
+    </body>
+</html>
