@@ -93,6 +93,92 @@ def logout():
 def quizz():
     return 'Quizz'
 
-@app.route('/resultats/')
-def resultats():
-    return 'Resultats'
+@app.route('/profile/', methods=['GET', 'POST'])
+@login_required
+def profile():
+    # Si l'utilisateur veut afficher la page
+    if request.method == 'GET':
+        conn = db_connection()
+        # On récupère les ids de toutes les catégories
+        all_categories = conn.execute('''
+            SELECT id_categorie, nom_categorie FROM categories''').fetchall()
+        all_categories = [list(id_cat) for id_cat in all_categories]
+        # On récupère les résultats de l'utilisateur dans chaque catégorie
+        data = []
+        for id_cat, nom_cat in all_categories:
+            pourcent = conn.execute('''
+                SELECT pourcent FROM pourcent_categorie
+                WHERE id_categorie=? AND username=?''',
+                (id_cat, nom_cat)).fetchone()
+            if pourcent != None:
+                data.append([nom_cat, pourcent])
+            else:
+                data.append([nom_cat, 0])
+        conn.close()
+        # On affiche la page
+        return render_template('profile.html', username=current_user.username,
+                            data=data)
+    # Si l'utilisateur veut changer de mot de passe
+    else:
+        old_password = request.form['old-password']
+        new_password1 = request.form['new-password1']
+        new_password2 = request.form['new-password2']
+        user = User.get_user_by_username(current_user.username)
+        if (user and bcrypt.check_password_hash(user.password, old_password)
+            and new_password1 == new_password2):
+            # Le mot de passe est changé
+            hashed_password = bcrypt.generate_password_hash(new_password1).decode('utf-8')
+            conn = db_connection()
+            conn.execute('''
+                UPDATE users
+                SET password=?
+                WHERE username=?''',
+                (hashed_password, current_user.username))
+            conn.commit()
+            conn.close()
+            logout_user()
+            return redirect('/login/')
+        elif user and bcrypt.check_password_hash(user.password, old_password):
+            # Les deux nouveaux mots de passe ne sont pas les mêmes
+            # On doit récupérer les résultats pour les réafficher
+            conn = db_connection()
+            # On récupère les ids de toutes les catégories
+            all_categories = conn.execute('''
+                SELECT id_categorie, nom_categorie FROM categories''').fetchall()
+            all_categories = [list(id_cat) for id_cat in all_categories]
+            # On récupère les résultats de l'utilisateur dans chaque catégorie
+            data = []
+            for id_cat, nom_cat in all_categories:
+                pourcent = conn.execute('''
+                    SELECT pourcent FROM pourcent_categorie
+                    WHERE id_categorie=? AND username=?''',
+                    (id_cat, nom_cat)).fetchone()
+                if pourcent != None:
+                    data.append([nom_cat, pourcent])
+                else:
+                    data.append([nom_cat, 0])
+            conn.close()
+            return render_template('profile.html', username=current_user.username,
+                                   data=data, differentNewPasswords=True)
+        else:
+            # Le mot de passe actuel entré ne correspond pas à celui de la BD
+            # On doit récupérer les résultats pour les réafficher
+            conn = db_connection()
+            # On récupère les ids de toutes les catégories
+            all_categories = conn.execute('''
+                SELECT id_categorie, nom_categorie FROM categories''').fetchall()
+            all_categories = [list(id_cat) for id_cat in all_categories]
+            # On récupère les résultats de l'utilisateur dans chaque catégorie
+            data = []
+            for id_cat, nom_cat in all_categories:
+                pourcent = conn.execute('''
+                    SELECT pourcent FROM pourcent_categorie
+                    WHERE id_categorie=? AND username=?''',
+                    (id_cat, nom_cat)).fetchone()
+                if pourcent != None:
+                    data.append([nom_cat, pourcent])
+                else:
+                    data.append([nom_cat, 0])
+            conn.close()
+            return render_template('profile.html', username=current_user.username,
+                                   data=data, badOldPassword=True)
