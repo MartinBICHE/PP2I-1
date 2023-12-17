@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session , redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -34,36 +34,42 @@ def quizz(categorie):
         question_index = 0
 
     conn = db_connection()
-    cursor = conn.execute(f'SELECT question_txt FROM questions WHERE id_categorie={categorie}')
-    qs = cursor.fetchall()
-    questions = [item[0] for item in qs]
-  
-    current_question = questions[question_index] if question_index < len(questions) else None
 
-    cursor1 = conn.execute(f'SELECT id_question FROM questions WHERE id_categorie={categorie}')
-    id = cursor1.fetchone()[0]
+    question_data = conn.execute('''
+        SELECT id_question, question_txt
+        FROM questions
+        WHERE id_categorie=?''',
+        (categorie,)).fetchall()
 
-    cursor2 = conn.execute(f'SELECT reponse_txt FROM reponses WHERE id_question={id}')
-    all_ans = cursor2.fetchall()
-    all_answers = [item[0] for item in all_ans]
+    # on met toutes les informations dans une liste de listes res :
+    # [ ['question1', ['réponse1', 'réponse2', ...], 'réponse juste'], ['question2', ...], ... ]
+    res = []
+    for question in question_data:
+        reponses = conn.execute('''
+            SELECT reponse_txt
+            FROM reponses
+            WHERE id_question = ?''',
+            (question[0],)).fetchall()
+        list_reponses = [reponse[0] for reponse in reponses]
+        bonne_reponse = conn.execute('''
+            SELECT reponse_txt
+            FROM reponses
+            WHERE id_question = ? AND is_good = 1''',
+            (question[0],)).fetchone()[0]
+        res.append([question[1], list_reponses, bonne_reponse])
 
-    cursor3 = conn.execute(f'SELECT reponse_txt FROM reponses WHERE id_question={id} AND is_good=1')
-    good = cursor3.fetchall()
-    correct_answer = [item[0] for item in good][0]
-    conn.close()
+    current_question = res[question_index] if question_index < len(res) else None
 
     if request.method == 'POST':
         user_response = request.form.get('reponse')
-        is_correct = user_response == correct_answer
+        is_correct = user_response == current_question[2]
         return render_template('quizz.html', current_question=current_question,
                                question_index=question_index, user_response=user_response,
-                               is_correct=is_correct, categorie=categorie,
-                               all_answers=all_answers, correct_answer=correct_answer)
+                               is_correct=is_correct, categorie=categorie)
     else:
         return render_template('quizz.html', current_question=current_question, 
-                               question_index=question_index, categorie=categorie,
-                               all_answers=all_answers)
-
+                               question_index=question_index, categorie=categorie)
+    
 
 @app.route('/resultats/')
 def resultats():

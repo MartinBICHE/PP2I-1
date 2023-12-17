@@ -8,10 +8,10 @@
     <h1>Quizz</h1>   
     {% if current_question %} 
         <div>
-            <p>{{ current_question }}</p>
+            <p>{{ current_question[0] }}</p>
             <form method='post' action="/quizz/{{ categorie }}?question_index={{ question_index }}">
                 <table border='1'>
-                    {% for reponse in all_answers %}
+                    {% for reponse in current_question[1] %}
                         <tr>
                             <td><input type='radio' name='reponse' value='{{ reponse }}'></td>
                             <td>{{reponse}}</td>
@@ -27,14 +27,14 @@
                 {% if is_correct %}
                     <p style='color: green;'>Correct !</p>
                 {% else %}
-                    <p style='color: red;'>Incorrect. La bonne réponse était : {{ correct_answer }}</p>
+                    <p style='color: red;'>Incorrect. La bonne réponse était : {{ current_question[2] }}</p>
                 {% endif %}
-                <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie, all_answers=all_answers, correct_answer=correct_answer) }}">Question suivante</a>   
+                <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}">Question suivante</a>   
             {% endif %}
         </div>
     {% else %}
         <p>Fin du quizz.</p>
-        <a href="{{ url_for('index') }}">Retour à l'accueil</a>
+        <a href="{{ url_for('index') }}">Retour à l'accueil.</a>
     {% endif %}
 </body>
 </html>
