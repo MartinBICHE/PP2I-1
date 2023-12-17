@@ -3,38 +3,59 @@
 <head>
     <meta charset='UTF-8'>
     <title>Quizz</title>
+    <style>
+        iframe {
+            border: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: block;
+            position: relative;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .body {
+            margin-top: -80px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Quizz</h1>   
-    {% if current_question %} 
-        <div>
-            <p>{{ current_question[0] }}</p>
-            <form method='post' action="/quizz/{{ categorie }}?question_index={{ question_index }}">
-                <table border='1'>
-                    {% for reponse in current_question[1] %}
-                        <tr>
-                            <td><input type='radio' name='reponse' value='{{ reponse }}'></td>
-                            <td>{{reponse}}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                {% if not user_response is defined %}
-                    <input type='submit' value='Valider'>
+    <iframe src="/navbar" width="100%"></iframe>
+    <div class="body">
+        <h1>Quizz</h1>   
+        {% if current_question %} 
+            <div>
+                <p>{{ current_question[0] }}</p>
+                <form method='post' action="/quizz/{{ categorie }}?question_index={{ question_index }}">
+                    <table border='1'>
+                        {% for reponse in current_question[1] %}
+                            <tr>
+                                <td><input type='radio' name='reponse' value='{{ reponse }}'></td>
+                                <td>{{reponse}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {% if not user_response is defined %}
+                        <input type='submit' value='Valider'>
+                    {% endif %}
+                </form>
+                {% if user_response is defined %}
+                    <p>Votre réponse : {{ user_response }}</p>
+                    {% if is_correct %}
+                        <p style='color: green;'>Correct !</p>
+                    {% else %}
+                        <p style='color: red;'>Incorrect. La bonne réponse était : {{ current_question[2] }}</p>
+                    {% endif %}
+                    <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}">Question suivante</a>   
                 {% endif %}
-            </form>
-            {% if user_response is defined %}
-                <p>Votre réponse : {{ user_response }}</p>
-                {% if is_correct %}
-                    <p style='color: green;'>Correct !</p>
-                {% else %}
-                    <p style='color: red;'>Incorrect. La bonne réponse était : {{ current_question[2] }}</p>
-                {% endif %}
-                <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}">Question suivante</a>   
-            {% endif %}
-        </div>
-    {% else %}
-        <p>Fin du quizz.</p>
-        <a href="{{ url_for('index') }}">Retour à l'accueil.</a>
-    {% endif %}
+            </div>
+        {% else %}
+            <p>Fin du quizz.</p>
+            <a href="{{ url_for('index') }}">Retour à l'accueil.</a>
+        {% endif %}
+    </div>
 </body>
 </html>

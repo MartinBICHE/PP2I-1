@@ -45,7 +45,7 @@
                 top:-2px;
                 right:1px;
             }
-            /*.bouton1 {
+            .bouton1 {
                 display:inline-block;
                 position: absolute;
                 top:15px;
@@ -78,21 +78,31 @@
                 background-color: rgb(80, 79, 79);
                 transition: background-color 0.3s, color 0.3s;
                 z-index:2;
-            }*/
+            }
         </style>
     </head>
     <body>
-        <div class="conteneur">
-            <div class="couleur"></div>
-            <a href="/" class="image1">
-                <img src="Logo.png" class="image1">
-            </a>
-            <div class="ligne"></div>
-            <a href="" class="image2">
-                <img src="Profil.png" class="image2">
-            </a>
-        </div>
-        <!-- <button class="bouton1"> Connexion </button>
-        <button class="bouton2"> S'inscrire </button> -->
+        {% if isauth %}
+            <div class="conteneur">
+                <div class="couleur"></div>
+                <a href="/" class="image1" target="_top">
+                    <img src="/static/Logo.png" class="image1">
+                </a>
+                <div class="ligne"></div>
+                <a href="/profile/" class="image2" target="_top">
+                    <img src="/static/Profil.png" class="image2">
+                </a>
+            </div>
+        {% else %}
+            <div class="conteneur">
+                <div class="couleur"></div>
+                <a href="/" class="image1" target="_top">
+                    <img src="/static/Logo.png" class="image1">
+                </a>
+                <div class="ligne"></div>
+                <a class="bouton1" href="/login/" target="_top"> Connexion </button>
+                <a class="bouton2" href="/register/" target="_top"> S'inscrire </button>
+            </div>
+        {% endif %}
     </body>
 </html>

@@ -49,6 +49,14 @@ def index():
         FROM categories''').fetchall()
     return render_template('index.html', bd=categories)
 
+# Navbar
+@app.route('/navbar/', methods=['GET'])
+def navbar():
+    if current_user.is_authenticated:
+        return render_template("navbar.html", current_user=current_user, isauth=True)
+    else:
+        return render_template("navbar.html", current_user=current_user, isauth=False)
+
 # Register
 @app.route('/register/', methods=['GET', 'POST'])
 def register():

@@ -7,28 +7,49 @@
         .error {
             color: red;
         }
+
+        iframe {
+            border: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: block;
+            position: relative;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .body {
+            margin-top: -80px;
+        }
     </style>
 </head>
 <body>
-    <h1>Login</h1>
+    <iframe src="/navbar" width="100%"></iframe>
+    <div class="body">
 
-    {% if badCredentials %}
-        <span class="error">Mauvais pseudo et/ou mot de passe !</span>
-    {% endif %}
+        <h1>Login</h1>
 
-    <form action="/login/" method="POST">
-        <table>
-            <tr>
-                <td>Pseudo : </td>
-                <td><input type="text" name="username"/></td>
-            </tr>
-            <tr>
-                <td>Mot de passe : </td>
-                <td><input type="password" name="password"</td>
-            </tr>
-        </table>
+        {% if badCredentials %}
+            <span class="error">Mauvais pseudo et/ou mot de passe !</span>
+        {% endif %}
 
-        <input type="submit" value="Login"/>
-    </form>
+        <form action="/login/" method="POST">
+            <table>
+                <tr>
+                    <td>Pseudo : </td>
+                    <td><input type="text" name="username"/></td>
+                </tr>
+                <tr>
+                    <td>Mot de passe : </td>
+                    <td><input type="password" name="password"</td>
+                </tr>
+            </table>
+
+            <input type="submit" value="Login"/>
+        </form>
+    </div>
 </body>
 </html>

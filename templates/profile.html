@@ -7,40 +7,60 @@
         .error {
             color: red;
         }
+
+        iframe {
+            border: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: block;
+            position: relative;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .body {
+            margin-top: -80px;
+        }
     </style>
 </head>
 <body>
-    <h1>Bienvue sur votre profil, {{ username }} !</h1>
+    <iframe src="/navbar" width="100%"></iframe>
+    <div class="body">
+        <h1>Bienvue sur votre profil, {{ username }} !</h1>
 
-    <h2>Vos résultats :</h2>
-    <table>
-        {% for cat in data %}
-            <tr>
-                <td>{{ cat[0] }} :</td>
-                <td>{{ cat[1] }}%</td>
-            </tr>
-        {% endfor %}
-    </table>
+        <h2>Vos résultats :</h2>
+        <table>
+            {% for cat in data %}
+                <tr>
+                    <td>{{ cat[0] }} :</td>
+                    <td>{{ cat[1] }}%</td>
+                </tr>
+            {% endfor %}
+        </table>
 
-    <h2>Nouveau mot de passe</h2>
+        <h2>Nouveau mot de passe</h2>
 
-    {% if badOldPassword %}
-        <span class="error">Vous n'avez pas entré le bon mot de passe actuel !</span>
-    {% elif differentNewPasswords %}
-        <span class="error">Les deux nouveaux mots de passe ne correspondent pas !</span>
-    {% endif %}
+        {% if badOldPassword %}
+            <span class="error">Vous n'avez pas entré le bon mot de passe actuel !</span>
+        {% elif differentNewPasswords %}
+            <span class="error">Les deux nouveaux mots de passe ne correspondent pas !</span>
+        {% endif %}
 
-    <form action="/profile/" method="POST">
-        <label>Mot de passe actuel : </label>
-        <input type="password" name="old-password"/>
-        <br/>
-        <label>Nouveau mot de passe : </label>
-        <input type="password" name="new-password1"/>
-        <br/>
-        <label>Confirmer ce nouveau mot de passe : </label>
-        <input type="password" name="new-password2"/>
-        <br/>
-        <input type="submit" value="Enregistrer"/>
-    </form>
+        <form action="/profile/" method="POST">
+            <label>Mot de passe actuel : </label>
+            <input type="password" name="old-password"/>
+            <br/>
+            <label>Nouveau mot de passe : </label>
+            <input type="password" name="new-password1"/>
+            <br/>
+            <label>Confirmer ce nouveau mot de passe : </label>
+            <input type="password" name="new-password2"/>
+            <br/>
+            <input type="submit" value="Enregistrer"/>
+        </form>
+    </div>
 </body>
 </html>
