@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+.tableau {
+    border-collapse: separate;
+    border-spacing: 25px;
+    margin : auto;
+}
+.bouton-lien {
+    display: inline-block;
+    background-color: #7baee4;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 80px;
+    font-size: 16px;
+    height: 80px;
+    width: 150px;
+    transition: background-color 0.3s ease;
+}
+
+.bouton-lien:hover {
+    background-color: #c79141;
+}
+
+</style>
+<body>
+    <div>
+        <table class="tableau">
+            {% for i in range(bd|length) %}
+                {% if i % 8 != 0 %}
+                    <td><a href="/quizz/{{ bd[i] }}" class="bouton-lien">{{ bd[i] }}</a></td>
+                {% else %}
+                    </tr><tr>
+                    <td><a href="/quizz/{{ bd[i] }}" class="bouton-lien">{{ bd[i] }}</a></td>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>    
+</body>
+</html>

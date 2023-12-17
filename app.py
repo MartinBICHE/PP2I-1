@@ -43,7 +43,8 @@ def load_user(username):
 # Index
 @app.route('/')
 def index():
-    return 'Index'
+    liste = ['a','b','c','d','e','f','g','mots de passe','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    return render_template('index.html',bd = liste)
 
 # Register
 @app.route('/register/', methods=['GET', 'POST'])
