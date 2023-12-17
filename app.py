@@ -43,8 +43,11 @@ def load_user(username):
 # Index
 @app.route('/')
 def index():
-    liste = ['a','b','c','d','e','f','g','mots de passe','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    return render_template('index.html',bd = liste)
+    conn = db_connection()
+    categories = conn.execute('''
+        SELECT id_categorie, nom_categorie
+        FROM categories''').fetchall()
+    return render_template('index.html', bd=categories)
 
 # Register
 @app.route('/register/', methods=['GET', 'POST'])

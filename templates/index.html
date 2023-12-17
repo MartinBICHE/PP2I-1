@@ -36,10 +36,10 @@
         <table class="tableau">
             {% for i in range(bd|length) %}
                 {% if i % 8 != 0 %}
-                    <td><a href="/quizz/{{ bd[i] }}" class="bouton-lien">{{ bd[i] }}</a></td>
+                    <td><a href="/quizz/{{ bd[i][0] }}" class="bouton-lien">{{ bd[i][1] }}</a></td>
                 {% else %}
                     </tr><tr>
-                    <td><a href="/quizz/{{ bd[i] }}" class="bouton-lien">{{ bd[i] }}</a></td>
+                    <td><a href="/quizz/{{ bd[i][0] }}" class="bouton-lien">{{ bd[i][1] }}</a></td>
                 {% endif %}
             {% endfor %}
         </table>
