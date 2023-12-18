@@ -54,6 +54,7 @@
             </div>
         {% else %}
             <p>Fin du quizz.</p>
+            <p>Pourcentage de réussite pour cette catégorie : {{ count / nb_rep * 100}}</p>
             <a href="{{ url_for('index') }}">Retour à l'accueil.</a>
         {% endif %}
     </div>

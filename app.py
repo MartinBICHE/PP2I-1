@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session, url_for
+from flask import Flask, render_template, redirect, request, make_response
 from flask_login import LoginManager, UserMixin, current_user, login_user, login_required, logout_user
 from flask_bcrypt import Bcrypt
 import sqlite3
@@ -132,21 +132,59 @@ def quizz(categorie):
         bonne_reponse = conn.execute('''
             SELECT reponse_txt
             FROM reponses
-            WHERE id_question = ? AND is_good = 1''',
+            WHERE id_question = ?
+            AND is_good = 1''',
             (question[0],)).fetchone()[0]
         res.append([question[1], list_reponses, bonne_reponse])
 
+    pct_cat = conn.execute('''
+                           SELECT pourcent 
+                           FROM pourcent_categorie
+                           WHERE id_categorie = ?
+                           AND username = ?''',
+                           (categorie, current_user.username)).fetchone()
+    
+    print(pct_cat[0] if pct_cat is not None else 0)
+
+    # reste à traiter le cas où l'utilisateur a deja fait le quizz
+
+    if pct_cat is None:
+        pct_cat = 0
+    
+    if question_index == len(res):
+        print(current_user.username, type(current_user.username))
+        print(categorie, type(categorie))
+        print(pct_cat, type(pct_cat))
+        conn.execute('''
+                    INSERT INTO pourcent_categorie 
+                    (id_categorie, username, pourcent)
+                    VALUES (?,?,?)''',
+                (categorie, current_user.username, pct_cat))
+        
+        conn.commit()
+    
+    print(pct_cat[0] if pct_cat is not None else 0)
+
+    conn.close()
+
     current_question = res[question_index] if question_index < len(res) else None
+    count = int(request.cookies.get('bonnes_reponses',0))
+    nb_rep = len(res)
 
     if request.method == 'POST':
         user_response = request.form.get('reponse')
-        is_correct = user_response == current_question[2]
-        return render_template('quizz.html', current_question=current_question,
+        is_correct = user_response == current_question[2]        
+        count = count+1 if is_correct else count
+        response = make_response(render_template('quizz.html', current_question=current_question,
                                question_index=question_index, user_response=user_response,
-                               is_correct=is_correct, categorie=categorie)
+                               is_correct=is_correct, categorie=categorie, count=count, nb_rep=nb_rep))
+        response.set_cookie('bonnes_reponses', str(count))
+        return response
+    
     else:
         return render_template('quizz.html', current_question=current_question, 
-                               question_index=question_index, categorie=categorie)
+                               question_index=question_index, categorie=categorie,
+                               count=count, nb_rep=nb_rep)
     
 # Page pour voir son profil
 @app.route('/profile/', methods=['GET', 'POST'])
