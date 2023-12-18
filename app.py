@@ -41,7 +41,7 @@ def load_user(username):
     return User.get_user_by_username(username)
 
 # Index
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     conn = db_connection()
     categories = conn.execute('''
@@ -49,13 +49,18 @@ def index():
         FROM categories''').fetchall()
     return render_template('index.html', bd=categories)
 
-# Navbar
-@app.route('/navbar/', methods=['GET'])
-def navbar():
+# Header
+@app.route('/header/', methods=['GET'])
+def header():
     if current_user.is_authenticated:
-        return render_template("navbar.html", current_user=current_user, isauth=True)
+        return render_template("header.html", current_user=current_user, isauth=True)
     else:
-        return render_template("navbar.html", current_user=current_user, isauth=False)
+        return render_template("header.html", current_user=current_user, isauth=False)
+
+# Footer
+@app.route('/footer/', methods=['GET'])
+def footer():
+    return render_template("footer.html")
 
 # Register
 @app.route('/register/', methods=['GET', 'POST'])

@@ -18,16 +18,26 @@
         }
 
         body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             margin: 0;
         }
 
         .body {
+            flex: 1;
             margin-top: -80px;
+            margin-left: 15px;
+        }
+
+        .footer {
+            height: 250px;
         }
     </style>
 </head>
 <body>
-    <iframe src="/navbar" width="100%"></iframe>
+    <iframe src="/header/" width="100%"></iframe>
+
     <div class="body">
         <h1>Inscription</h1>
 
@@ -50,5 +60,7 @@
             <input type="submit" value="S'inscrire"/>
         </form>
     </div>
+
+    <iframe class="footer" src="/footer" width="100%"></iframe>
 </body>
 </html>

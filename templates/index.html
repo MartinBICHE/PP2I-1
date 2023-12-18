@@ -4,51 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .tableau {
+            border-collapse: separate;
+            border-spacing: 25px;
+            margin : auto;
+        }
+        .bouton-lien {
+            display: inline-block;
+            background-color: #7baee4;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 80px;
+            font-size: 16px;
+            height: 80px;
+            width: 150px;
+            transition: background-color 0.3s ease;
+        }
+
+        .bouton-lien:hover {
+            background-color: #c79141;
+        }
+
+        iframe {
+            border: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: block;
+            position: relative;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .body {
+            flex: 1;
+            margin-top: -80px;
+            margin-left: 15px;
+        }
+
+        .footer {
+            height: 250px;
+        }
+    </style>
 </head>
-<style>
-    .tableau {
-        border-collapse: separate;
-        border-spacing: 25px;
-        margin : auto;
-    }
-    .bouton-lien {
-        display: inline-block;
-        background-color: #7baee4;
-        color: #fff;
-        text-decoration: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-align: center;
-        line-height: 80px;
-        font-size: 16px;
-        height: 80px;
-        width: 150px;
-        transition: background-color 0.3s ease;
-    }
-
-    .bouton-lien:hover {
-        background-color: #c79141;
-    }
-
-    iframe {
-        border: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        display: block;
-        position: relative;
-    }
-
-    body {
-        margin: 0;
-    }
-
-    .body {
-        margin-top: -80px;
-    }
-</style>
 <body>
-    <iframe src="/navbar" width="100%"></iframe>
+    <iframe src="/header/" width="100%"></iframe>
+
     <div class="body">
         <div>
             <table class="tableau">
@@ -63,5 +73,7 @@
             </table>
         </div>    
     </div>
+
+    <iframe class="footer" src="/footer" width="100%"></iframe>
 </body>
 </html>
