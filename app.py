@@ -167,7 +167,7 @@ def quizz(categorie):
             else:
                 pct_cat = pct_cat[0]
             # On calcule le poucentage de l'essai actuel
-            pourcent = count / len(question_data) * 100
+            pourcent = round(count / len(question_data) * 100, 2)
             # Si l'utilisateur a fait mieux que son record, on actualise
             if pourcent > pct_cat:
                 try:
