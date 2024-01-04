@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, request, make_response
-from flask_login import LoginManager, UserMixin, current_user, login_user, login_required, logout_user
+from flask import *
+from flask_login import *
 from flask_bcrypt import Bcrypt
 import sqlite3
 
@@ -151,8 +151,15 @@ def quizz(categorie):
     nb_rep = len(res)
 
     if request.method == 'POST':
+        user_responses = session.get('user_responses', {})
+
         user_response = request.form.get('reponse')
-        is_correct = user_response == current_question[2]        
+        is_correct = user_response == current_question[2]    
+
+        # On stocke la réponse de l'utilisateur dans la session
+        user_responses[question_index] = {'response': user_response, 'is_correct': is_correct}
+        session['user_responses'] = user_responses
+
         # Si on commence le quizz, on remet le compteur à 0
         if question_index == 0:
             count = 0
@@ -197,9 +204,11 @@ def quizz(categorie):
         return response
     
     else:
+        user_responses = session.get('user_responses', {})
+        user_response_data = user_responses.get(question_index)
         return render_template('quizz.html', current_question=current_question, 
                                question_index=question_index, categorie=categorie,
-                               count=count, nb_rep=nb_rep)
+                               count=count, nb_rep=nb_rep, user_response_data=user_response_data)
     
 # Page pour voir son profil
 @app.route('/profile/', methods=['GET', 'POST'])

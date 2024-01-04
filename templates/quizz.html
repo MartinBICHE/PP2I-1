@@ -142,13 +142,22 @@
                             <label class="encadre reponse-{{ loop.index }}">
                                 <div class = "texte">
                                     <input  type="radio" name="reponse" value='{{ reponse }}'>
+                                        {% if user_response_data and user_response_data['response'] == reponse %}checked{% endif %}>
                                     {{reponse}} 
                                 </div>
                             </label>
                         {% endfor %}
+
+                        <!-- Ajout de champs d'entrées cachés pour stocker les réponses précédentes -->
+                        {% for i in range(question_index) %}
+                            {% if user_responses[i] %}
+                                <input type="hidden" name="previous_responses[{{ i }}]" value="{{ user_responses[i]['response'] }}">
+                            {% endif %}
+                        {% endfor %}
                         
                         <script>
-                            // Permet d'avoir la même largeur pour l'encadrée de chaque réponse  en l'occurence la largeur sera celle de la case la plus large en fonction de la taille de la réponse
+                            // Permet d'avoir la même largeur pour l'encadrée de chaque réponse
+                            // en l'occurence la largeur sera celle de la case la plus large en fonction de la taille de la réponse
                             window.addEventListener('load', function() {
                                 var encadres = document.querySelectorAll('.encadre');
                                 var maxWidth = 0;
