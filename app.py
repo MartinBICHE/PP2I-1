@@ -192,7 +192,7 @@ def quizz(categorie):
         
         response = make_response(render_template('quizz.html', current_question=current_question,
                                question_index=question_index, user_response=user_response,
-                               is_correct=is_correct, categorie=categorie, count=count, nb_rep=nb_rep))
+                               correct_answer=current_question[2], categorie=categorie, count=count, nb_rep=nb_rep))
         response.set_cookie('bonnes_reponses', str(count))
         return response
     

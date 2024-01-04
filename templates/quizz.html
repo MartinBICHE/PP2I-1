@@ -19,6 +19,7 @@
             display: inline-block;
             border-radius: 10px;
         }
+
         .encadre.reponse-1 {
             text-align: center;
             background-color:white;
@@ -58,6 +59,7 @@
             bottom:40%;
             transform: translateX(-50%)
         }
+
         .triangle {
             width: 0;
             height: 0;
@@ -66,16 +68,19 @@
             vertical-align: middle;
             transform: rotate(180deg);
         }
+
         .triangle-left {
             border-width: 10px 0 10px 17.32px; 
             border-color: transparent transparent transparent rgb(80, 79, 79);
             margin-right: 40px
         }
+
         .triangle-right {
             border-width: 10px 17.32px 10px 0; 
             border-color: transparent rgb(80, 79, 79) transparent transparent;
             margin-left: 40px;
         }
+
         .question {
             color:rgb(80, 79, 79);
             display: inline-block;
@@ -83,6 +88,7 @@
             font-size: 18px;
             font-weight: bold;
         }
+
         body {
             display: flex;
             flex-direction: column;
@@ -91,20 +97,24 @@
             align-items: center;
             text-align:center;
         }
+
         .container{
             justify-content: center;
             display: flex;
             align-items: center;
         }
+
         .body {
             flex: 1;
             margin-top: -80px;
             margin-left: 15px;
         }
+
         .texte{
-            color:rgb(80, 79, 79);
+            color: rgb(80, 79, 79);
             font-weight: bold;
         }
+
         input[type="submit"] {
             margin-top:55%;
             background-color: rgb(80, 79, 79);
@@ -113,16 +123,69 @@
             outline: none;
             font-size:14px;
         }
+
         .résultat{
             margin-top:55%;
         }
+
         h1{
             font-size:40px;
             text-decoration: underline;
             color:rgb(80, 79, 79);
         }
+
         .footer {
             height: 250px;
+        }
+
+        .bonne-reponse {
+            color: green;
+            font-weight: bold;
+        }
+
+        .mauvaise-reponse {
+            color: red;
+            font-weight: bold;
+        }
+
+        .encadre-bonne-reponse {
+            border: 5px solid green !important;
+            background-color: lightgreen !important;
+        }
+
+        .encadre-mauvaise-reponse {
+            border: 5px solid red !important;
+            background-color: lightcoral !important;
+        }
+
+        .radio-bonne-reponse {
+            accent-color: green;
+        }
+
+        input[type='radio'].radio-bonne-reponse {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid green;
+        }
+
+        input[type="radio"].radio-bonne-reponse:checked {
+            background-color: black;
+        }
+
+        input[type="radio"].radio-mauvaise-reponse {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid red;
+        }
+
+        input[type="radio"].radio-mauvaise-reponse:checked {
+            background-color: black;
         }
     </style>
 </head>
@@ -131,53 +194,60 @@
 
     <div class="body">
         <h1>Quizz</h1>   
-        {% if current_question %} 
-            <div class="container">
-                <a href="{{ url_for('quizz', question_index = question_index - 1, categorie = categorie) }}" class="triangle triangle-left"></a>
+        {% if current_question %}
+            <form method='post' action="/quizz/{{ categorie }}?question_index={{ question_index }}">
+                <div class="container">
+                    <a href="{{ url_for('quizz', question_index = question_index - 1, categorie = categorie) }}" class="triangle triangle-left"></a>
                     <p class="question">{{ current_question[0] }}</p>
-                    <form method='post' action="/quizz/{{ categorie }}?question_index={{ question_index }}">
-                <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}" class="triangle triangle-right"></a>
-            </div>
-                        {% for reponse in current_question[1] %}
-                            <label class="encadre reponse-{{ loop.index }}">
-                                <div class = "texte">
-                                    <input  type="radio" name="reponse" value='{{ reponse }}'>
-                                    {{reponse}} 
-                                </div>
-                            </label>
-                        {% endfor %}
-                        
-                        <script>
-                            // Permet d'avoir la même largeur pour l'encadrée de chaque réponse  en l'occurence la largeur sera celle de la case la plus large en fonction de la taille de la réponse
-                            window.addEventListener('load', function() {
-                                var encadres = document.querySelectorAll('.encadre');
-                                var maxWidth = 0;
-                            
-                                encadres.forEach(function(encadre) {
-                                    maxWidth = Math.max(maxWidth, encadre.clientWidth);
-                                });
-                            
-                                encadres.forEach(function(encadre) {
-                                    encadre.style.width = maxWidth + 'px';
-                                });
-                            });
-                        </script>
-                
-                    {% if not user_response is defined %}
-                        <input type='submit' value='Valider'>
+                    <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}" class="triangle triangle-right"></a>
+                </div>
+                {% for reponse in current_question[1] %}
+                    {% if user_response and reponse == correct_answer %}
+                        <div class="encadre reponse-{{ loop.index }} encadre-bonne-reponse">
+                            {% if user_response == reponse %}
+                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
+                            {% else %}
+                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
+                            {% endif %}
+                            <label class="bonne-reponse">{{ reponse }}</label>
+                        </div>
+                    {% elif user_response %}
+                        <div class="encadre reponse-{{ loop.index }} encadre-mauvaise-reponse">
+                            {% if user_response == reponse %}
+                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
+                            {% else %}
+                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
+                            {% endif %}
+                            <label class="mauvaise-reponse">{{ reponse }}</label>
+                        </div>
+                    {% else %}
+                        <div class="encadre reponse-{{ loop.index }}">
+                            <input  type="radio" name="reponse" value="{{ reponse }}">
+                            <label class="texte">{{ reponse }}</label>
+                        </div>
                     {% endif %}
-                </form>
-                {% if user_response is defined %}
-                    <div class="résultat"></div>
-                        <p>Votre réponse : {{ user_response }}</p>
-                        {% if is_correct %}
-                            <p style='color: green;'>Correct !</p>
-                        {% else %}
-                            <p style='color: red;'>Incorrect. La bonne réponse était : {{ current_question[2] }}</p>
-                        {% endif %}
-                    </div>
+                {% endfor %}
+                        
+                <script>
+                    // Permet d'avoir la même largeur pour l'encadrée de chaque réponse  en l'occurence la largeur sera celle de la case la plus large en fonction de la taille de la réponse
+                    window.addEventListener('load', function() {
+                        var encadres = document.querySelectorAll('.encadre');
+                        var maxWidth = 0;
+                    
+                        encadres.forEach(function(encadre) {
+                            maxWidth = Math.max(maxWidth, encadre.clientWidth);
+                        });
+                    
+                        encadres.forEach(function(encadre) {
+                            encadre.style.width = maxWidth + 'px';
+                        });
+                    });
+                </script>
+                
+                {% if not user_response is defined %}
+                    <input type='submit' value='Valider'>
                 {% endif %}
-            </div>
+            </form>
         {% else %}
             <p>Fin du quizz.</p>
             <p>Pourcentage de réussite pour cette catégorie : {{ (count / nb_rep * 100) | round(2)}} %</p>
