@@ -39,20 +39,16 @@
         }
 
         body {
-            display: flex;
-            flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            align-items: flex-start;
-            justify-content: center;
+            display: flex;
+            flex-direction: column;
         }
 
         .body {
             flex: 1;
             margin-top: -80px;
             margin-left: 15px;
-            display: flex;
-            flex-wrap: wrap;
         }
         .image-0{
             width:50%;
@@ -92,20 +88,30 @@
             height: 250px;
             margin-top:10%;
         }
+        table {
+            margin : auto;
+        }
     </style>
 </head>
 <body>
     <iframe src="/header/" width="100%"></iframe>
 
     <div class="body">
-        <div>
-            {% for i in range(bd|length) %}
-                <a href="/quizz/{{ bd[i][0] }}" class="bouton-lien bouton-lien-{{ i }}">
-                    <img src="static/image-{{i}}.png" class="image-{{i}}"> <br>
-                    {{ bd[i][1] }}
-                </a>
-            {% endfor %}   
-        </div>
+        <table>
+            <tr>
+                {% for i in range(bd|length) %}
+                        <td>
+                            <a href="/quizz/{{ bd[i][0] }}" class="bouton-lien bouton-lien-{{ i }}">
+                                <img src="static/image-{{i}}.png" class="image-{{i}}"> <br>
+                                {{ bd[i][1] }}
+                            </a>
+                        </td>
+                    {% if i%2 %}
+                        </tr>
+                        <tr>
+                    {% endif %}
+                {% endfor %}   
+        </table>
     </div>
 
     <iframe class="footer" src="/footer" width="100%"></iframe>
