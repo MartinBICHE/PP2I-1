@@ -69,24 +69,26 @@
             width: 0;
             height: 0;
             border-style: solid;
-            display: inline-block;
             vertical-align: middle;
             transform: rotate(180deg);
-        }
-
-        .triangle-left {
-            border-width: 10px 0 10px 17.32px; 
-            border-color: transparent transparent transparent rgb(80, 79, 79);
-            margin-right: 40px
         }
 
         .triangle-right {
             border-width: 10px 17.32px 10px 0; 
             border-color: transparent rgb(80, 79, 79) transparent transparent;
-            margin-left: 40px;
+            margin-left: 25px;
         }
 
-        .question {
+        .question1 {
+            color:rgb(80, 79, 79);
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 18px;
+            font-weight: bold;
+            margin-right : 40px;
+        }
+
+        .question2 {
             color:rgb(80, 79, 79);
             display: inline-block;
             vertical-align: middle;
@@ -202,10 +204,19 @@
         {% if current_question %}
             <form method='post' action="/quizz/{{ categorie }}?question_index={{ question_index }}">
                 <div class="container">
-                    <a href="{{ url_for('quizz', question_index = question_index - 1, categorie = categorie) }}" class="triangle triangle-left"></a>
-                    <p class="question">{{ current_question[0] }}</p>
-                    <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}" class="triangle triangle-right"></a>
+                    {% if not user_response is defined %}
+                        <p class="question1">{{ current_question[0] }}</p>
+                    {% else %}
+                        <p class="question2">{{ current_question[0] }}</p>
+                    {% endif %} 
+                    {% if not user_response is defined %}
+                        <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}" class="triangle triangle-right" id="lienQuizz" style="display: none;"></a>
+                    {% else %}
+                        <a href="{{ url_for('quizz', question_index = question_index + 1, categorie = categorie) }}" class="triangle triangle-right" id="lienQuizz"></a>
+                    {% endif %}                   
+                
                 </div>
+            
                 {% for reponse in current_question[1] %}
                     {% if user_response and reponse == correct_answer %}
                         <div class="encadre reponse-{{ loop.index }} encadre-bonne-reponse">
@@ -232,10 +243,11 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-                
                 {% if not user_response is defined %}
-                    <input type='submit' value='Valider'>
+                    <input type='submit' id="Valider" value='Valider'>
                 {% endif %}
+                
+                
             </form>
         {% else %}
             <p>Fin du quizz.</p>
@@ -245,6 +257,6 @@
     </div>
     <br>
     <iframe class="footer" src="/footer" width="100%"></iframe>
-
+    
 </body>
 </html>
