@@ -14,55 +14,17 @@
         }
 
         .encadre {
-            border: 2px solid black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             padding: 10px;
-            display: inline-block;
             border-radius: 10px;
             width: 300px;
-        }
-
-        .encadre.reponse-1 {
+            height: 150px;
             text-align: center;
             background-color:white;
             border:5px solid rgb(80, 79, 79);
-            position: absolute;
-            left: 35%;
-            top:30%;
-            transform: translateX(-50%);
-            
-        }
-
-        .encadre.reponse-2 {
-            text-align: center;
-            background-color:white;
-            border:5px solid rgb(80, 79, 79);
-            position: absolute;
-            left: 65%;
-            top:30%;
-            transform: translateX(-50%);
-            
-        }
-
-        .encadre.reponse-3 {
-            text-align: center;
-            background-color:white;
-            border:5px solid rgb(80, 79, 79);
-            position: absolute;
-            left: 35%;
-            top:50%;
-            transform: translateX(-50%);
-            
-        }
-
-        .encadre.reponse-4 {
-            text-align: center;
-            background-color:white;
-            border:5px solid rgb(80, 79, 79);
-            position: absolute;
-            left: 65%;
-            top:50%;
-            transform: translateX(-50%);
-            
+            margin: 10px;
         }
 
         .triangle {
@@ -82,7 +44,6 @@
         .question1 {
             color:rgb(80, 79, 79);
             display: inline-block;
-            vertical-align: middle;
             font-size: 18px;
             font-weight: bold;
             margin-right : 40px;
@@ -91,7 +52,6 @@
         .question2 {
             color:rgb(80, 79, 79);
             display: inline-block;
-            vertical-align: middle;
             font-size: 18px;
             font-weight: bold;
         }
@@ -123,7 +83,7 @@
         }
 
         input[type="submit"] {
-            margin-top:55%;
+            margin-top: 20px;
             background-color: rgb(80, 79, 79);
             color : white;
             border-radius: 10px;
@@ -217,32 +177,47 @@
                 
                 </div>
             
-                {% for reponse in current_question[1] %}
-                    {% if user_response and reponse == correct_answer %}
-                        <div class="encadre reponse-{{ loop.index }} encadre-bonne-reponse">
-                            {% if user_response == reponse %}
-                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
-                            {% else %}
-                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
+                <table>
+                    <tr>
+                        {% for reponse in current_question[1] %}
+                            <td>
+                                {% if user_response and reponse == correct_answer %}
+                                    <div class="encadre encadre-bonne-reponse">
+                                        <div>
+                                            {% if user_response == reponse %}
+                                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
+                                            {% else %}
+                                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
+                                            {% endif %}
+                                            <label class="bonne-reponse">{{ reponse }}</label>
+                                        </div>
+                                    </div>
+                                {% elif user_response %}
+                                    <div class="encadre encadre-mauvaise-reponse">
+                                        <div>
+                                            {% if user_response == reponse %}
+                                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
+                                            {% else %}
+                                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
+                                            {% endif %}
+                                            <label class="mauvaise-reponse">{{ reponse }}</label>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="encadre">
+                                        <div>
+                                            <input  type="radio" name="reponse" value="{{ reponse }}">
+                                            <label class="texte">{{ reponse }}</label>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            {% if loop.index == 2 %}
+                                </tr><tr>
                             {% endif %}
-                            <label class="bonne-reponse">{{ reponse }}</label>
-                        </div>
-                    {% elif user_response %}
-                        <div class="encadre reponse-{{ loop.index }} encadre-mauvaise-reponse">
-                            {% if user_response == reponse %}
-                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
-                            {% else %}
-                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
-                            {% endif %}
-                            <label class="mauvaise-reponse">{{ reponse }}</label>
-                        </div>
-                    {% else %}
-                        <div class="encadre reponse-{{ loop.index }}">
-                            <input  type="radio" name="reponse" value="{{ reponse }}">
-                            <label class="texte">{{ reponse }}</label>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                        {% endfor %}
+                    </tr>
+                </table>
                 {% if not user_response is defined %}
                     <input type='submit' id="Valider" value='Valider'>
                 {% endif %}
