@@ -17,7 +17,6 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 10px;
             border-radius: 10px;
             width: 300px;
             height: 150px;
@@ -74,7 +73,6 @@
         .body {
             flex: 1;
             margin-top: -80px;
-            margin-left: 15px;
         }
 
         .texte{
@@ -89,10 +87,6 @@
             border-radius: 10px;
             outline: none;
             font-size:14px;
-        }
-
-        .résultat{
-            margin-top:55%;
         }
 
         h1{
@@ -154,6 +148,12 @@
         input[type="radio"].radio-mauvaise-reponse:checked {
             border: 4px solid rgb(13, 122, 255);
         }
+
+        .save-me {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -177,47 +177,49 @@
                 
                 </div>
             
-                <table>
-                    <tr>
-                        {% for reponse in current_question[1] %}
-                            <td>
-                                {% if user_response and reponse == correct_answer %}
-                                    <div class="encadre encadre-bonne-reponse">
-                                        <div>
-                                            {% if user_response == reponse %}
-                                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
-                                            {% else %}
-                                                <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
-                                            {% endif %}
-                                            <label class="bonne-reponse">{{ reponse }}</label>
+                <div class="save-me">
+                    <table>
+                        <tr>
+                            {% for reponse in current_question[1] %}
+                                <td>
+                                    {% if user_response and reponse == correct_answer %}
+                                        <div class="encadre encadre-bonne-reponse">
+                                            <div>
+                                                {% if user_response == reponse %}
+                                                    <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
+                                                {% else %}
+                                                    <input class="radio-bonne-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
+                                                {% endif %}
+                                                <label class="bonne-reponse">{{ reponse }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% elif user_response %}
-                                    <div class="encadre encadre-mauvaise-reponse">
-                                        <div>
-                                            {% if user_response == reponse %}
-                                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
-                                            {% else %}
-                                                <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
-                                            {% endif %}
-                                            <label class="mauvaise-reponse">{{ reponse }}</label>
+                                    {% elif user_response %}
+                                        <div class="encadre encadre-mauvaise-reponse">
+                                            <div>
+                                                {% if user_response == reponse %}
+                                                    <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}" checked/>
+                                                {% else %}
+                                                    <input class="radio-mauvaise-reponse" type="radio" name="reponse" value="{{ reponse }}"/>
+                                                {% endif %}
+                                                <label class="mauvaise-reponse">{{ reponse }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% else %}
-                                    <div class="encadre">
-                                        <div>
-                                            <input  type="radio" name="reponse" value="{{ reponse }}">
-                                            <label class="texte">{{ reponse }}</label>
+                                    {% else %}
+                                        <div class="encadre">
+                                            <div>
+                                                <input  type="radio" name="reponse" value="{{ reponse }}">
+                                                <label class="texte">{{ reponse }}</label>
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
+                                </td>
+                                {% if loop.index == 2 %}
+                                    </tr><tr>
                                 {% endif %}
-                            </td>
-                            {% if loop.index == 2 %}
-                                </tr><tr>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                </table>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </div>
                 {% if not user_response is defined %}
                     <input type='submit' id="Valider" value='Valider'>
                 {% endif %}
